@@ -1,0 +1,70 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Resources/wand.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/player.gd" type="Script" id=2]
+[ext_resource path="res://Resources/walk1.png" type="Texture" id=3]
+[ext_resource path="res://Resources/walk3.png" type="Texture" id=4]
+[ext_resource path="res://Resources/walk2.png" type="Texture" id=5]
+[ext_resource path="res://Resources/crouch.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/EndScreen.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/skeleton.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Resources/jump.wav" type="AudioStream" id=9]
+[ext_resource path="res://Resources/land.wav" type="AudioStream" id=10]
+[ext_resource path="res://Resources/powerup.wav" type="AudioStream" id=11]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "crouch",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 5 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "walk",
+"speed": 10.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 24.18, 27.9314 )
+
+[node name="player" type="KinematicBody2D"]
+script = ExtResource( 2 )
+MoveAcc = 10
+MoveDec = 40
+MaxXSpeed = 500
+HasWater = true
+Knockback = 400
+_losescreen = ExtResource( 7 )
+_skeleton = ExtResource( 8 )
+
+[node name="body" type="AnimatedSprite" parent="."]
+position = Vector2( 0, 10 )
+frames = SubResource( 1 )
+animation = "walk"
+offset = Vector2( 0, -10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 35.855 )
+shape = SubResource( 2 )
+
+[node name="wand" type="Sprite" parent="."]
+position = Vector2( 0, 10 )
+rotation = 1.5708
+texture = ExtResource( 1 )
+offset = Vector2( 0, -50 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 3, 3 )
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+
+[node name="jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+
+[node name="land" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+
+[node name="pickup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )

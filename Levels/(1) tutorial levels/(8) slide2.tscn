@@ -1,0 +1,136 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/win.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/EndScreen.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/ball.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Resources/win.wav" type="AudioStream" id=6]
+[ext_resource path="res://Scenes/win.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Resources/VCR_OSD_MONO_1.001.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://Scenes/TileMap.tscn" type="PackedScene" id=9]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 8 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 1 )
+_ball = ExtResource( 5 )
+_winscreen = ExtResource( 4 )
+partime = 1.2
+LevelHelp = "TIP: Which way are you facing?"
+
+[node name="TileMap" parent="." instance=ExtResource( 9 )]
+tile_data = PoolIntArray( 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 327682, 1, 0, 327683, 1610612736, 0, 327684, 1610612736, 0, 327685, 1, 0, 327686, 1, 0, 393218, 1, 0, 393219, 1610612736, 0, 393220, 1610612736, 0, 393221, 1610612736, 0, 393222, 1, 0, 458754, 1, 0, 458755, 1, 0, 458756, 1, 0, 458757, 1, 0, 458758, 1, 0 )
+
+[node name="player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 221.579, 378.796 )
+JumpSpeed = 500
+HasWater = false
+
+[node name="win" parent="." instance=ExtResource( 7 )]
+position = Vector2( 352.852, 353.105 )
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -108.0
+margin_top = -33.0
+custom_fonts/font = SubResource( 1 )
+text = "ESC for menu
+R to restart"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="descript" type="VBoxContainer" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -194.0
+margin_bottom = 95.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="time" type="Label" parent="CanvasLayer/descript"]
+margin_right = 194.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 2 )
+text = "time:"
+
+[node name="hscore" type="Label" parent="CanvasLayer/descript"]
+margin_top = 33.0
+margin_right = 194.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 2 )
+text = "high:"
+
+[node name="par" type="Label" parent="CanvasLayer/descript"]
+margin_top = 66.0
+margin_right = 194.0
+margin_bottom = 95.0
+custom_fonts/font = SubResource( 2 )
+text = "par :"
+
+[node name="Timers" type="VBoxContainer" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -95.0
+margin_bottom = 118.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time" type="Label" parent="CanvasLayer/Timers"]
+margin_right = 95.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 3 )
+text = "abcde"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HighScore" type="Label" parent="CanvasLayer/Timers"]
+margin_top = 33.0
+margin_right = 95.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 3 )
+text = "abcde"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="par" type="Label" parent="CanvasLayer/Timers"]
+margin_top = 66.0
+margin_right = 95.0
+margin_bottom = 95.0
+custom_fonts/font = SubResource( 3 )
+text = "abcde"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Countdown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="win2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+[connection signal="shoot" from="." to="player" method="_on_Main_shoot"]
+[connection signal="oops" from="player" to="." method="_on_player_oops"]
+[connection signal="body_entered" from="win" to="." method="_on_win_body_entered"]
+[connection signal="timeout" from="Countdown" to="." method="_on_Countdown_timeout"]
